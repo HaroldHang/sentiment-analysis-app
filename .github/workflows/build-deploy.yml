@@ -8,6 +8,11 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        env:
+            CONTAINER_REGISTRY_ENDPOINT: ${{secrets.CONTAINER_REGISTRY_ENDPOINT}}
+            FURY_USERNAME: ${{secrets.FURY_USERNAME}}
+            FURY_TOKEN: ${{secrets.FURY_TOKEN}}
+            API_MODEL_LSTM_VERSION: ${{secrets.API_MODEL_LSTM_VERSION}}
         steps:
         -   uses: actions/checkout@v4
         -   name: Login to Scaleway Container Registry
@@ -17,7 +22,6 @@ jobs:
                 password: ${{ secrets.SCALEWAY_API_KEY }}
                 registry: ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}
         -   name: Build the Docker compose images
-            env: 
             run: | 
                 docker compose build frontend
                 docker compose build api
