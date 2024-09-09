@@ -10,8 +10,8 @@ jobs:
         runs-on: ubuntu-latest
         env:
             CONTAINER_REGISTRY_ENDPOINT: ${{secrets.CONTAINER_REGISTRY_ENDPOINT}}
-            FURY_USERNAME: ${{secrets.FURY_USERNAME}}
-            FURY_TOKEN: ${{secrets.FURY_TOKEN}}
+            #FURY_USERNAME: ${{secrets.FURY_USERNAME}}
+            #FURY_TOKEN: ${{secrets.FURY_TOKEN}}
             #API_MODEL_LSTM_VERSION: ${{secrets.API_MODEL_LSTM_VERSION}}
         steps:
         -   uses: actions/checkout@v4
@@ -27,39 +27,33 @@ jobs:
                 
         -   name: Push the Docker Image
             run: |
-                 docker compose push front_end
-                 
+                docker compose push front_end
+                
         
-    #deploy:
-    #    # Deployment job
-    #    runs-on: ubuntu-latest
-    #    needs: build
-#
-    #    steps:
-    #    #-   name: Setup SSH key
-    #    #    uses: shimataro/ssh-key-action@v2
-    #    #    with:   
-    #    #        key: ${{ secrets.SSH_PRIVATE_KEY }}
-    #    #        name: id_rsa # optional
-    #    #        known_hosts: ${{ secrets.KNOWN_HOSTS }}
-    #    #-   name: Login to Scaleway Container Registry
-    #    #    uses: docker/login-action@v3
-    #    #    with:
-    #    #        username: nologin
-    #    #        password: ${{ secrets.SCALEWAY_API_KEY }}
-    #    #        registry: ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}
-    #    -   name: Deploy to VM via SSH
-    #        uses: appleboy/ssh-action@v1.0.3
-    #        with:
-    #            host: ${{ secrets.SSH_HOST }}
-    #            username: ${{ secrets.SSH_USERNAME }}
-    #            key: ${{ secrets.SSH_PRIVATE_KEY }}
-    #            #key_path: 
-    #            #port: 22
-    #            script: |
-    #                docker login ${{secrets.CONTAINER_REGISTRY_ENDPOINT}} -u nologin -p ${{ secrets.SCALEWAY_API_KEY }}
-    #                docker pull ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/ml-app
-    #                docker stop ml-app-deploy || true
-    #                docker rm ml-app-deploy || true
-    #                docker run -d --name ml-app-deploy -p 8000:8000 ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/ml-app
-#
+    deploy:
+        # Deployment job
+        runs-on: ubuntu-latest
+        needs: build
+
+        steps:
+        -   name: Copy docker compose file
+            uses: appleboy/scp-action@v0.1.7
+            with:   
+                host: ${{ secrets.SSH_HOST }}
+                username: ${{ secrets.SSH_USERNAME }}
+                key: ${{ secrets.SSH_PRIVATE_KEY }}
+                source: "docker-compose.yml,.dockerignore"
+                target: /ml-app
+        -   name: Deploy to VM via SSH
+            uses: appleboy/ssh-action@v1.0.3
+            with:
+                host: ${{ secrets.SSH_HOST }}
+                username: ${{ secrets.SSH_USERNAME }}
+                key: ${{ secrets.SSH_PRIVATE_KEY }}
+                #key_path: 
+                #port: 22
+                script: |
+                    docker login ${{secrets.CONTAINER_REGISTRY_ENDPOINT}} -u nologin -p ${{ secrets.SCALEWAY_API_KEY }}
+                    ls /
+                    cd /ml-app
+                    docker compose up --no-build -d
