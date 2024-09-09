@@ -9,16 +9,16 @@ services:
         restart: always
         ports: 
             - "80:5000"
-        depends_on:
-            - api
-    api:
-        image: ${CONTAINER_REGISTRY_ENDPOINT}/sentiment-analysis/api
-        build:
-            context: api/
-            dockerfile: Dockerfile
-            args: # passes in variables to dockerfile via args
-                - FURY_USERNAME=${FURY_USERNAME}
-                - FURY_TOKEN=${FURY_TOKEN}
-                - API_MODEL_LSTM_VERSION=${API_MODEL_LSTM_VERSION}
-        container_name: api
-        restart: always
+        #depends_on:
+        #    - api
+    #api:
+    #    image: ${CONTAINER_REGISTRY_ENDPOINT}/sentiment-analysis/api
+    #    build:
+    #        context: api/
+    #        dockerfile: Dockerfile
+    #        args: # passes in variables to dockerfile via args
+    #            - FURY_USERNAME=${FURY_USERNAME}
+    #            - FURY_TOKEN=${FURY_TOKEN}
+    #            - API_MODEL_LSTM_VERSION=${API_MODEL_LSTM_VERSION}
+    #    container_name: api
+    #    restart: always

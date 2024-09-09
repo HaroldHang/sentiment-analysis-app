@@ -24,11 +24,11 @@ jobs:
         -   name: Build the Docker compose images
             run: | 
                 docker compose build front_end
-                docker compose build api
+                
         -   name: Push the Docker Image
             run: |
                  docker compose push front_end
-                 docker compose push api
+                 
         
     #deploy:
     #    # Deployment job
