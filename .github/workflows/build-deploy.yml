@@ -12,7 +12,7 @@ jobs:
             CONTAINER_REGISTRY_ENDPOINT: ${{secrets.CONTAINER_REGISTRY_ENDPOINT}}
             FURY_USERNAME: ${{secrets.FURY_USERNAME}}
             FURY_TOKEN: ${{secrets.FURY_TOKEN}}
-            API_MODEL_LSTM_VERSION: ${{secrets.API_MODEL_LSTM_VERSION}}
+            #API_MODEL_LSTM_VERSION: ${{secrets.API_MODEL_LSTM_VERSION}}
         steps:
         -   uses: actions/checkout@v4
         -   name: Login to Scaleway Container Registry
