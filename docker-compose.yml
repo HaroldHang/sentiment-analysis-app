@@ -1,7 +1,7 @@
-version: '3'
 
 services:
     front_end:
+        image: ${CONTAINER_REGISTRY_ENDPOINT}/sentiment-analysis/frontend
         build:
             context: front_end/
             dockerfile: Dockerfile
@@ -12,6 +12,7 @@ services:
         depends_on:
             - api
     api:
+        image: ${CONTAINER_REGISTRY_ENDPOINT}/sentiment-analysis/api
         build:
             context: api/
             dockerfile: Dockerfile
