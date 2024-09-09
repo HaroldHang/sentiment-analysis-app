@@ -33,8 +33,9 @@ jobs:
     deploy:
         # Deployment job
         runs-on: ubuntu-latest
+        env:
+            CONTAINER_REGISTRY_ENDPOINT: ${{secrets.CONTAINER_REGISTRY_ENDPOINT}}
         needs: build
-
         steps:
         -   uses: actions/checkout@v4
         -   name: Copy docker compose file
