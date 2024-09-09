@@ -58,4 +58,5 @@ jobs:
                     docker login ${{secrets.CONTAINER_REGISTRY_ENDPOINT}} -u nologin -p ${{ secrets.SCALEWAY_API_KEY }}
                     ls /
                     cd /ml-app
+                    export CONTAINER_REGISTRY_ENDPOINT=${{secrets.CONTAINER_REGISTRY_ENDPOINT}}
                     docker compose up --no-build -d
