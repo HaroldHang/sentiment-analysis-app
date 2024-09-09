@@ -36,6 +36,7 @@ jobs:
         needs: build
 
         steps:
+        -   uses: actions/checkout@v4
         -   name: Copy docker compose file
             uses: appleboy/scp-action@v0.1.7
             with:   
